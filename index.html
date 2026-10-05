@@ -825,9 +825,11 @@ const css=document.createElement('style');css.textContent=`
 .kke button.p{background:#fff;color:#000;border-color:#fff}.kke button:disabled{opacity:.4;cursor:default}
 .kke input,.kke textarea,.kke select{width:100%;background:#0a0a0a;color:#fff;border:1px solid #333;border-radius:8px;padding:.55rem .7rem;font:14px/1.5 system-ui}
 .kke textarea{resize:vertical;min-height:42px}.kke label{display:block;font-size:12px;color:#a6a6a6;margin:.7rem 0 .25rem}
+body.kk-on #sp{bottom:calc(84px + env(safe-area-inset-bottom,0px))}@media(max-width:700px){body.kk-on #sp{bottom:calc(130px + env(safe-area-inset-bottom,0px))}}
 body.kk-on #kkb{display:none}body.kk-on #kkbar{display:flex}body.kk-on{padding-bottom:64px}
 body.kk-on [data-kke]{outline:1px dashed rgba(255,255,255,.4);outline-offset:3px;cursor:pointer;pointer-events:auto!important}
 body.kk-on [data-kke]:hover{outline:2px solid #f5c542;background-color:rgba(245,197,66,.08)}
+body.kk-on .ub .fr::after{pointer-events:none}
 body.kk-on [data-kke="img"]{outline:2px dashed rgba(245,197,66,.8);outline-offset:-2px}
 .kkm{position:fixed;inset:0;z-index:2147483001;background:rgba(0,0,0,.7);display:grid;place-items:center;padding:1rem}
 .kkc{width:100%;max-width:380px;background:#0b0b0b;border:1px solid #333;border-radius:16px;padding:1.6rem;color:#fff}
@@ -880,7 +882,7 @@ EL.set(bSp,['sp_link']);bSp.onclick=()=>openPop(bSp);
 /* ---- images ---- */
 function pickImg(id){choose(async f=>{try{const key=IMGK[id],d=await shrink(f,'img');PEND[key]=d;pend[key]='fs:'+key+':'+Date.now();window.__kkApplyImg(id,d);upd();toast('Picture ready. Click Save changes to publish it')}catch(x){toast('Could not use that picture',1)}})}
 document.addEventListener('click',e=>{if(!on||e.target.closest('.kke'))return;e.preventDefault();e.stopPropagation();let t=e.target;
- while(t&&t!==document.body){if(t.dataset&&t.dataset.i&&IMGK[t.dataset.i]){closePop();return pickImg(t.dataset.i)}if(EL.has(t))return openPop(t,e);t=t.parentElement}closePop()},true);
+ while(t&&t!==document.body){if(t.dataset&&t.dataset.i&&IMGK[t.dataset.i]){closePop();return pickImg(t.dataset.i)}const ci=t.querySelector&&t.classList&&t.classList.contains('fr')?t.querySelector('img[data-i]'):null;if(ci&&IMGK[ci.dataset.i]){closePop();return pickImg(ci.dataset.i)}if(EL.has(t))return openPop(t,e);t=t.parentElement}closePop()},true);
 ['pointerdown','mousedown','touchstart'].forEach(n=>document.addEventListener(n,e=>{if(on&&!e.target.closest('.kke'))e.stopPropagation()},true));
 /* ---- films & songs drawer (data-driven parts: wheel posters, reel songs) ---- */
 const PANS=F.filter(p=>/^(Wheel|Reel songs)/.test(p[0])),dr=E('div','kke');dr.id='kkdr';
