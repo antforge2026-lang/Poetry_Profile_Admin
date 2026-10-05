@@ -832,7 +832,7 @@ body.kk-on [data-kke="img"]{outline:2px dashed rgba(245,197,66,.8);outline-offse
 .kkm{position:fixed;inset:0;z-index:2147483001;background:rgba(0,0,0,.7);display:grid;place-items:center;padding:1rem}
 .kkc{width:100%;max-width:380px;background:#0b0b0b;border:1px solid #333;border-radius:16px;padding:1.6rem;color:#fff}
 .kkc h3{margin:0 0 .3rem;font:400 1.5rem system-ui}
-#kkpop{position:fixed;z-index:2147483002;width:min(380px,calc(100vw - 20px));max-height:80vh;overflow:auto;background:#0b0b0b;border:1px solid #555;border-radius:14px;padding:1rem 1.1rem 1.1rem;color:#fff;box-shadow:0 18px 60px rgba(0,0,0,.7)}
+#kkpop{position:fixed;z-index:2147483002;width:min(380px,calc(100vw - 20px));max-height:calc(100vh - 96px);overflow:auto;background:#0b0b0b;border:1px solid #555;border-radius:14px;padding:1rem 1.1rem 1.1rem;color:#fff;box-shadow:0 18px 60px rgba(0,0,0,.7)}
 #kkpop .r{display:flex;gap:.5rem;margin-top:.9rem}
 #kkdr{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);z-index:2147483001;background:#0b0b0b;border-left:1px solid #333;color:#fff;display:none;flex-direction:column}
 #kkdr.o{display:flex}#kkdr .h{padding:1rem;border-bottom:1px solid #262626;display:grid;gap:.5rem}#kkdr .b{overflow:auto;padding:0 1rem 5rem;flex:1}
@@ -844,8 +844,8 @@ document.head.appendChild(css);
 const toast=(m,e)=>{const t=$$('#kkt');t.textContent=m;t.className='kke'+(e?' e':'');t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',3400)};
 function $$(s){return document.querySelector(s)}
 const bar=E('div','kke');bar.id='kkbar';
-const st=E('span','sp','Click any text or picture to change it'),bFilms=E('button','','Films & songs'),bDis=E('button','','Discard'),bSave=E('button','p','Save changes'),bOut=E('button','','Sign out');
-[bFilms,bDis,bSave,bOut].forEach(b=>b.type='button');bar.append(st,bFilms,bDis,bSave,bOut);
+const st=E('span','sp','Click any text or picture to change it'),bFilms=E('button','','Films & songs'),bSp=E('button','','Spotify playlist'),bDis=E('button','','Discard'),bSave=E('button','p','Save changes'),bOut=E('button','','Sign out');
+[bFilms,bSp,bDis,bSave,bOut].forEach(b=>b.type='button');bar.append(st,bFilms,bSp,bDis,bSave,bOut);
 const tt=E('div','kke');tt.id='kkt';
 document.body.append(bar,tt);
 let app,auth,db,ref,A,AU,FS,user=null,on=false,saved={},pend={},PEND={},K=null;
@@ -871,11 +871,12 @@ function setKey(k,v){if(v===cur(k))return;const base=typeof saved[k]==='string'?
 /* ---- popover for text ---- */
 function closePop(){const p=$$('#kkpop');if(p)p.remove()}
 function openPop(el,ev){closePop();const keys=EL.get(el),p=E('div','kke');p.id='kkpop';const tas={};
- keys.forEach(k=>{p.append(E('label','',LBL[k]||k));const t=E('textarea');t.value=cur(k);t.rows=Math.min(8,Math.max(1,String(t.value).split('\n').length+(t.value.length>70?Math.ceil(t.value.length/45):0)));t.placeholder=DEF[k]||'';tas[k]=t;p.append(t)});
+ keys.forEach(k=>{p.append(E('label','',LBL[k]||k));const t=E('textarea');t.value=cur(k);t.rows=Math.min(8,Math.max(1,String(t.value).split('\n').length+(t.value.length>70?Math.ceil(t.value.length/45):0)));t.placeholder=DEF[k]||'';t.oninput=()=>setKey(k,t.value.trim());tas[k]=t;p.append(t)});
  const r=E('div','r'),ap=E('button','p','Apply'),rs=E('button','','Original'),cn=E('button','','Cancel');ap.type=rs.type=cn.type='button';r.append(ap,rs,cn);p.append(r);
  ap.onclick=()=>{keys.forEach(k=>setKey(k,tas[k].value.trim()));closePop()};
- rs.onclick=()=>keys.forEach(k=>{tas[k].value=DEF[k]||''});cn.onclick=closePop;
- document.body.appendChild(p);const b=el.getBoundingClientRect();let x=Math.min(Math.max(10,b.left),innerWidth-p.offsetWidth-10),y=b.bottom+8;if(y+p.offsetHeight>innerHeight-70)y=Math.max(10,b.top-p.offsetHeight-8);if(y<10)y=10;p.style.left=x+'px';p.style.top=y+'px';tas[keys[0]].focus()}
+ rs.onclick=()=>keys.forEach(k=>{tas[k].value=DEF[k]||'';setKey(k,tas[k].value.trim())});cn.onclick=closePop;
+ document.body.appendChild(p);const b=el.getBoundingClientRect();let x=Math.min(Math.max(10,b.left),innerWidth-p.offsetWidth-10),y=b.bottom+8;if(y+p.offsetHeight>innerHeight-70)y=Math.max(10,b.top-p.offsetHeight-8);y=Math.min(y,innerHeight-76-p.offsetHeight);if(y<10)y=10;p.style.left=x+'px';p.style.top=y+'px';tas[keys[0]].focus()}
+EL.set(bSp,['sp_link']);bSp.onclick=()=>openPop(bSp);
 /* ---- images ---- */
 function pickImg(id){choose(async f=>{try{const key=IMGK[id],d=await shrink(f,'img');PEND[key]=d;pend[key]='fs:'+key+':'+Date.now();window.__kkApplyImg(id,d);upd();toast('Picture ready. Click Save changes to publish it')}catch(x){toast('Could not use that picture',1)}})}
 document.addEventListener('click',e=>{if(!on||e.target.closest('.kke'))return;e.preventDefault();e.stopPropagation();let t=e.target;
@@ -892,7 +893,7 @@ function draw(){body.textContent='';const q=qs.value.trim().toLowerCase();PANS[s
  else{const t=E('textarea');t.value=v;t.rows=r||1;t.placeholder=d;t.oninput=()=>{const base=typeof saved[k]==='string'?saved[k]:d;const x=t.value.trim();if(x===base)delete pend[k];else pend[k]=x;w.classList.toggle('d',k in pend);upd()};w.append(t)}body.append(w)})}
 sel.onchange=qs.oninput=draw;dr.querySelector('[data-c]').onclick=()=>dr.classList.remove('o');bFilms.onclick=()=>{closePop();dr.classList.add('o');draw()};
 /* ---- save / exit ---- */
-bSave.onclick=async()=>{bSave.disabled=true;st.textContent='Saving…';try{const o={};let rl=0;for(const k in pend){o[k]=pend[k]===''?FS.deleteField():pend[k];if(/^(ch\d+_|f\d+_\d+_[nyx]$|wk)/.test(k))rl=1}
+bSave.onclick=async()=>{bSave.disabled=true;st.textContent='Saving…';try{const o={};let rl=0;for(const k in pend){o[k]=pend[k]===''?FS.deleteField():pend[k];if(/^(ch\d+_|f\d+_\d+_[nyx]$|wk|sp_link)/.test(k))rl=1}
  for(const k in PEND)if(String(pend[k]||'').startsWith('fs:'))await FS.setDoc(FS.doc(db,'site','img_'+k),{d:PEND[k]});
  await FS.setDoc(ref,o,{merge:true});for(const k in pend){if(pend[k]==='')delete saved[k];else saved[k]=pend[k]}pend={};PEND={};upd();toast('Saved. It is live on the portfolio');if(rl)setTimeout(()=>location.reload(),900)}catch(x){upd();toast('Save failed: '+(x.code||x.message),1)}};
 bDis.onclick=()=>{if(confirm('Throw away your unsaved changes?')){pend={};PEND={};location.reload()}};
