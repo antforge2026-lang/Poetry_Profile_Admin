@@ -806,7 +806,7 @@ const db=getFirestore(initializeApp(FB)),orig={};window.__kk={H,MAP,orig,N,P,g};
 imgs=async c=>{const I=JSON.parse(localStorage.getItem('kk_imgs')||'{}'),use={};for(const u of Object.values(c.img)){if(!u.startsWith('fs:'))continue;const[,k,t]=u.split(':');use[k]=1;if(!I[k]||I[k].t!==t){I[k]={t,d:((await getDoc(doc(db,'site','img_'+k))).data()||{}).d||''}}}for(const k in I)if(!use[k])delete I[k];window.__kkMem=I;try{localStorage.setItem('kk_imgs',JSON.stringify(I))}catch(e){}};
 liveImgs=async c=>{const I=window.__kkMem||JSON.parse(localStorage.getItem('kk_imgs')||'{}');for(const id in c.img){const u=c.img[id];let s=u;if(u.startsWith('fs:')){const[,k]=u.split(':');s=(I[k]&&I[k].d)||'';if(!s)try{s=((await getDoc(doc(db,'site','img_'+k))).data()||{}).d||''}catch(e){}}if(s)window.__kkApplyImg(id,s)}};
 onSnapshot(doc(db,'site','content'),snap=>{const d=snap.data()||{};
- for(const k in MAP)[].concat(MAP[k]).forEach((sel,n)=>{const h=H(sel);if(!h)return;const o=k+n;if(!(o in orig))orig[o]=h.g();const v=g(d,k),rm=v==='\u200b';if(h.el){const ce=document.querySelector(sel[0]==='%'?sel.slice(2):'^~@'.includes(sel[0])?sel.slice(1):sel);ce&&ce.classList.toggle('kk-rm',rm)}const same=v&&!rm&&N(v)===(h.el?P(orig[o]):N(orig[o]));if(rm&&!h.el&&!window.__kkEd&&sel[0]!=='@'&&sel[0]!=='%')h.s('',true);else v&&!rm&&!same?h.s(v):h.s(orig[o],true)});
+ for(const k in MAP)[].concat(MAP[k]).forEach((sel,n)=>{const h=H(sel);if(!h)return;const o=k+n;if(!(o in orig))orig[o]=h.g();const v=g(d,k),rm=v==='\u200b';if(sel[0]!=='@'&&sel[0]!=='%'){const ce=document.querySelector('^~'.includes(sel[0])?sel.slice(1):sel);ce&&ce.classList.toggle('kk-rm',rm)}const same=v&&!rm&&N(v)===(h.el?P(orig[o]):N(orig[o]));v&&!rm&&!same?h.s(v):h.s(orig[o],true)});
  sp(d.sp_link);cfg(d)},()=>{})}catch(e){console.warn('Live content unavailable',e)}
 </script>
 <script type="module">
@@ -836,8 +836,9 @@ body.kk-on [data-kke="img"]{outline:2px dashed rgba(245,197,66,.8);outline-offse
 .kkc{width:100%;max-width:380px;background:#0b0b0b;border:1px solid #333;border-radius:16px;padding:1.6rem;color:#fff}
 .kkc h3{margin:0 0 .3rem;font:400 1.5rem system-ui}
 #kkpop{position:fixed;z-index:2147483002;width:min(380px,calc(100vw - 20px));max-height:calc(100vh - 96px);overflow:auto;background:#0b0b0b;border:1px solid #555;border-radius:14px;padding:1rem 1.1rem 1.1rem;color:#fff;box-shadow:0 18px 60px rgba(0,0,0,.7)}
-#kkpop .r{display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap}
+#kkpop .kkr{display:flex;align-items:center;gap:.5rem;margin-top:.9rem;flex-wrap:wrap}
 body.kk-on .kk-rm{opacity:.35;text-decoration:line-through}
+#kkpop .kkdel{margin-left:auto;color:#ff7b7b;border-color:#6b2a2a;padding:.5rem .65rem;display:inline-flex}#kkpop .kkdel:hover{background:#3a1515}
 #kkdr{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);z-index:2147483001;background:#0b0b0b;border-left:1px solid #333;color:#fff;display:none;flex-direction:column}
 #kkdr.o{display:flex}#kkdr .h{padding:1rem;border-bottom:1px solid #262626;display:grid;gap:.5rem}#kkdr .b{overflow:auto;padding:0 1rem 5rem;flex:1}
 #kkdr .f{border-left:3px solid #262626;padding:0 0 0 .7rem;margin-top:.6rem}#kkdr .f.d{border-color:#f5c542}
@@ -871,13 +872,13 @@ function mapEls(){for(const k in MAP)[].concat(MAP[k]).forEach((sel,n)=>{const c
  EL.forEach((_,el)=>el.setAttribute('data-kke','t'));document.querySelectorAll('[data-i]').forEach(e=>{if(IMGK[e.dataset.i])e.setAttribute('data-kke','img')})}
 const cur=k=>k in pend?pend[k]:typeof saved[k]==='string'?saved[k]:(DEF[k]||'');
 function setKey(k,v){if(v===cur(k))return;const base=typeof saved[k]==='string'?saved[k]:(DEF[k]||'');if(v===base)delete pend[k];else pend[k]=v;
- (KS[k]||[]).forEach(([sel,n])=>{const h=K.H(sel);if(!h)return;const o=k+n;if(!(o in K.orig))K.orig[o]=h.g();const og=K.orig[o],rm=v==='\u200b';if(h.el){const ce=document.querySelector(sel[0]==='%'?sel.slice(2):'^~@'.includes(sel[0])?sel.slice(1):sel);ce&&ce.classList.toggle('kk-rm',rm)}const same=v&&!rm&&K.N(v)===(h.el?K.P(og):K.N(og));v&&!rm&&!same?h.s(v):h.s(og,true)});upd()}
+ (KS[k]||[]).forEach(([sel,n])=>{const h=K.H(sel);if(!h)return;const o=k+n;if(!(o in K.orig))K.orig[o]=h.g();const og=K.orig[o],rm=v==='\u200b';if(sel[0]!=='@'&&sel[0]!=='%'){const ce=document.querySelector('^~'.includes(sel[0])?sel.slice(1):sel);ce&&ce.classList.toggle('kk-rm',rm)}const same=v&&!rm&&K.N(v)===(h.el?K.P(og):K.N(og));v&&!rm&&!same?h.s(v):h.s(og,true)});upd()}
 /* ---- popover for text ---- */
 function closePop(){const p=$$('#kkpop');if(p)p.remove()}
 function openPop(el,ev){closePop();const keys=EL.get(el),p=E('div','kke');p.id='kkpop';const tas={};
  keys.forEach(k=>{p.append(E('label','',LBL[k]||k));const t=E('textarea');t.value=cur(k)==='\u200b'?'':cur(k);t.rows=Math.min(8,Math.max(1,String(t.value).split('\n').length+(t.value.length>70?Math.ceil(t.value.length/45):0)));t.placeholder=DEF[k]||'';t.oninput=()=>setKey(k,t.value.trim());tas[k]=t;p.append(t)});
- const r=E('div','r'),ap=E('button','p','Apply'),rs=E('button','','Original'),cn=E('button','','Cancel'),rmb=E('button','','Remove');ap.type=rs.type=cn.type=rmb.type='button';r.append(ap,rs);if(keys.every(k=>(KS[k]||[]).length&&!(KS[k]||[]).some(([q])=>q[0]==='@'||q[0]==='%')))r.append(rmb);r.append(cn);p.append(r);
- rmb.onclick=()=>{keys.forEach(k=>setKey(k,'\u200b'));closePop();toast('Removed. Click Save changes to publish')};
+ const r=E('div','kkr'),ap=E('button','p','Apply'),rs=E('button','','Original'),cn=E('button','','Cancel'),rmb=E('button','kkdel');rmb.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg>';rmb.title=rmb.ariaLabel='Delete this box';ap.type=rs.type=cn.type=rmb.type='button';r.append(ap,rs,cn);if(keys.every(k=>(KS[k]||[]).length&&!(KS[k]||[]).some(([q])=>q[0]==='@'||q[0]==='%')))r.append(rmb);p.append(r);
+ rmb.onclick=()=>{keys.forEach(k=>setKey(k,'\u200b'));closePop();toast('Box deleted. Click Save changes to publish')};
  ap.onclick=()=>{keys.forEach(k=>{const v=tas[k].value.trim();if(!v&&cur(k)==='\u200b')return;setKey(k,v)});closePop()};
  rs.onclick=()=>keys.forEach(k=>{tas[k].value=DEF[k]||'';setKey(k,tas[k].value.trim())});cn.onclick=closePop;
  document.body.appendChild(p);const b=el.getBoundingClientRect();let x=Math.min(Math.max(10,b.left),innerWidth-p.offsetWidth-10),y=b.bottom+8;if(y+p.offsetHeight>innerHeight-70)y=Math.max(10,b.top-p.offsetHeight-8);y=Math.min(y,innerHeight-76-p.offsetHeight);if(y<10)y=10;p.style.left=x+'px';p.style.top=y+'px';tas[keys[0]].focus()}
